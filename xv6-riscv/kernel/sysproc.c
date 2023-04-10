@@ -98,7 +98,18 @@ sys_uptime(void)
 uint64
 sys_memsize(void)
 {
-  return myproc()->sz;
-  
+  return myproc()->sz;  
 }
+
+uint64
+sys_set_ps_priority(void)
+{
+  int new_priority;
+  argint(0, &new_priority);
+  return set_ps_priority(new_priority);
+}
+
+
+
+  
 

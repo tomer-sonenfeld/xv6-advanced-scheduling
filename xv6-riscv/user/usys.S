@@ -110,3 +110,8 @@ memsize:
  li a7, SYS_memsize
  ecall
  ret
+.global set_ps_priority
+set_ps_priority:
+ li a7, SYS_set_ps_priority
+ ecall
+ ret

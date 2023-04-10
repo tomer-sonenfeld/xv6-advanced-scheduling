@@ -187,12 +187,14 @@ freeproc(struct proc *p)
       }
       
     }
+    
     if(min==LLONG_MAX){
       p->accumulator=0;
     }
     else{
       p->accumulator=min;
     }
+    
   
   
 }
@@ -474,35 +476,60 @@ wait(uint64 addr , uint64 addr_exitmsg)
 //  - swtch to start running that process.
 //  - eventually that process transfers control
 //    via swtch back to the scheduler.
+
+
+
+//***********************************************
 void
 scheduler(void)
 {
   struct proc *p;
   struct cpu *c = mycpu();
-  
+
   c->proc = 0;
   for(;;){
     // Avoid deadlock by ensuring that devices can interrupt.
     intr_on();
 
-    for(p = proc; p < &proc[NPROC]; p++) {
+    struct proc * min_acc_proc = 0;
+    for(p = proc; p < &proc[NPROC]; p++){
       acquire(&p->lock);
-      if(p->state == RUNNABLE) {
-        // Switch to chosen process.  It is the process's job
-        // to release its lock and then reacquire it
-        // before jumping back to us.
-        p->state = RUNNING;
-        c->proc = p;
-        swtch(&c->context, &p->context);
+      if(p->state == RUNNABLE){
 
-        // Process is done running for now.
-        // It should have changed its p->state before coming back.
-        c->proc = 0;
+        // Update min_acc_proc when finding first RUNNABLE
+        if(min_acc_proc == 0) {min_acc_proc = p;}
+
+        if(min_acc_proc->accumulator > p->accumulator){
+
+          // p is better then current min_acc_proc
+          // Release current min_acc_proc lock , keep holding the p lock
+
+          release(&min_acc_proc->lock);
+          min_acc_proc = p;
+          
+        }
       }
-      release(&p->lock);
+
+      else {release(&p->lock);}
+      
+    }
+
+    
+    if(min_acc_proc != 0){
+
+      // CPU FOUND A RUNNABLE PROCESS! 
+      min_acc_proc->state = RUNNING;
+      c->proc = min_acc_proc;
+      swtch(&c->context, &min_acc_proc->context);
+
+      // Process returned from context switch
+
+      c->proc = 0;
+      release(&min_acc_proc->lock);
     }
   }
 }
+//***********************************************
 
 // Switch to scheduler.  Must hold only p->lock
 // and have changed proc->state. Saves and restores
@@ -620,12 +647,15 @@ wakeup(void *chan)
                 }
               
             }
-            if(min==LLONG_MAX){
-              p->accumulator=0;
-            }
-            else{
-              p->accumulator=min;
-            }
+         
+          if(min==LLONG_MAX){
+            p->accumulator=0;
+          }
+          else{
+            p->accumulator=min;
+          }
+          
+      
 
 
 
@@ -709,6 +739,7 @@ either_copyin(void *dst, int user_src, uint64 src, uint64 len)
   }
 }
 
+
 // Print a process listing to console.  For debugging.
 // Runs when user types ^P on console.
 // No lock to avoid wedging a stuck machine further.
@@ -738,3 +769,16 @@ procdump(void)
     printf("\n");
   }
 }
+
+
+int
+set_ps_priority(int new_ps)
+{
+  struct proc *p = myproc(); 
+  p->ps_priority = new_ps;
+   
+  return 0;
+}
+
+
+

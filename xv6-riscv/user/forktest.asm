@@ -47,7 +47,7 @@ forktest(void)
 
   print("fork test\n");
   3a:	00000517          	auipc	a0,0x0
-  3e:	44e50513          	addi	a0,a0,1102 # 488 <memsize+0xe>
+  3e:	45650513          	addi	a0,a0,1110 # 490 <set_ps_priority+0xe>
   42:	00000097          	auipc	ra,0x0
   46:	fbe080e7          	jalr	-66(ra) # 0 <print>
 
@@ -71,18 +71,18 @@ forktest(void)
   if(n == N){
     print("fork claimed to work N times!\n");
   64:	00000517          	auipc	a0,0x0
-  68:	43c50513          	addi	a0,a0,1084 # 4a0 <memsize+0x26>
+  68:	44450513          	addi	a0,a0,1092 # 4a8 <set_ps_priority+0x26>
   6c:	00000097          	auipc	ra,0x0
   70:	f94080e7          	jalr	-108(ra) # 0 <print>
     exit(1,"");
   74:	00000597          	auipc	a1,0x0
-  78:	42458593          	addi	a1,a1,1060 # 498 <memsize+0x1e>
+  78:	42c58593          	addi	a1,a1,1068 # 4a0 <set_ps_priority+0x1e>
   7c:	4505                	li	a0,1
   7e:	00000097          	auipc	ra,0x0
   82:	35c080e7          	jalr	860(ra) # 3da <exit>
       exit(0,"");
   86:	00000597          	auipc	a1,0x0
-  8a:	41258593          	addi	a1,a1,1042 # 498 <memsize+0x1e>
+  8a:	41a58593          	addi	a1,a1,1050 # 4a0 <set_ps_priority+0x1e>
   8e:	00000097          	auipc	ra,0x0
   92:	34c080e7          	jalr	844(ra) # 3da <exit>
   if(n == N){
@@ -119,7 +119,7 @@ forktest(void)
 
   print("fork test OK\n");
   c8:	00000517          	auipc	a0,0x0
-  cc:	42850513          	addi	a0,a0,1064 # 4f0 <memsize+0x76>
+  cc:	43050513          	addi	a0,a0,1072 # 4f8 <set_ps_priority+0x76>
   d0:	00000097          	auipc	ra,0x0
   d4:	f30080e7          	jalr	-208(ra) # 0 <print>
 }
@@ -131,23 +131,23 @@ forktest(void)
   e2:	8082                	ret
       print("wait stopped early\n");
   e4:	00000517          	auipc	a0,0x0
-  e8:	3dc50513          	addi	a0,a0,988 # 4c0 <memsize+0x46>
+  e8:	3e450513          	addi	a0,a0,996 # 4c8 <set_ps_priority+0x46>
   ec:	00000097          	auipc	ra,0x0
   f0:	f14080e7          	jalr	-236(ra) # 0 <print>
       exit(1,"");
   f4:	00000597          	auipc	a1,0x0
-  f8:	3a458593          	addi	a1,a1,932 # 498 <memsize+0x1e>
+  f8:	3ac58593          	addi	a1,a1,940 # 4a0 <set_ps_priority+0x1e>
   fc:	4505                	li	a0,1
   fe:	00000097          	auipc	ra,0x0
  102:	2dc080e7          	jalr	732(ra) # 3da <exit>
     print("wait got too many\n");
  106:	00000517          	auipc	a0,0x0
- 10a:	3d250513          	addi	a0,a0,978 # 4d8 <memsize+0x5e>
+ 10a:	3da50513          	addi	a0,a0,986 # 4e0 <set_ps_priority+0x5e>
  10e:	00000097          	auipc	ra,0x0
  112:	ef2080e7          	jalr	-270(ra) # 0 <print>
     exit(1,"");
  116:	00000597          	auipc	a1,0x0
- 11a:	38258593          	addi	a1,a1,898 # 498 <memsize+0x1e>
+ 11a:	38a58593          	addi	a1,a1,906 # 4a0 <set_ps_priority+0x1e>
  11e:	4505                	li	a0,1
  120:	00000097          	auipc	ra,0x0
  124:	2ba080e7          	jalr	698(ra) # 3da <exit>
@@ -166,7 +166,7 @@ main(void)
  134:	efe080e7          	jalr	-258(ra) # 2e <forktest>
   exit(0,"");
  138:	00000597          	auipc	a1,0x0
- 13c:	36058593          	addi	a1,a1,864 # 498 <memsize+0x1e>
+ 13c:	36858593          	addi	a1,a1,872 # 4a0 <set_ps_priority+0x1e>
  140:	4501                	li	a0,0
  142:	00000097          	auipc	ra,0x0
  146:	298080e7          	jalr	664(ra) # 3da <exit>
@@ -188,7 +188,7 @@ _main()
  156:	fd6080e7          	jalr	-42(ra) # 128 <main>
   exit(0,"");
  15a:	00000597          	auipc	a1,0x0
- 15e:	33e58593          	addi	a1,a1,830 # 498 <memsize+0x1e>
+ 15e:	34658593          	addi	a1,a1,838 # 4a0 <set_ps_priority+0x1e>
  162:	4501                	li	a0,0
  164:	00000097          	auipc	ra,0x0
  168:	276080e7          	jalr	630(ra) # 3da <exit>
@@ -834,3 +834,13 @@ memsize:
  47c:	00000073          	ecall
  ret
  480:	8082                	ret
+
+0000000000000482 <set_ps_priority>:
+.global set_ps_priority
+set_ps_priority:
+ li a7, SYS_set_ps_priority
+ 482:	48dd                	li	a7,23
+ ecall
+ 484:	00000073          	ecall
+ ret
+ 488:	8082                	ret

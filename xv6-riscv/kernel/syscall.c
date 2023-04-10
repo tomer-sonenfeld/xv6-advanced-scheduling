@@ -129,7 +129,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_memsize] sys_memsize,
-
+[SYS_set_ps_priority] sys_set_ps_priority,
 
 };
 
