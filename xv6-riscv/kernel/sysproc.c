@@ -99,4 +99,6 @@ uint64
 sys_memsize(void)
 {
   return myproc()->sz;
+  
 }
+

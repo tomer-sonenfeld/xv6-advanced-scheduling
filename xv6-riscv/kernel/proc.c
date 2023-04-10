@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include <limits.h>
 
 struct cpu cpus[NCPU];
 
@@ -125,6 +126,7 @@ found:
   p->pid = allocpid();
   p->state = USED;
 
+
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
     freeproc(p);
@@ -169,6 +171,30 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
+  p->ps_priority=5;
+
+ //..................................
+    struct proc *other_p;
+    long long min=LLONG_MAX;
+    for(other_p = proc; other_p < &proc[NPROC]; other_p++) {
+        if(other_p != p){
+           acquire(&other_p->lock);
+            if((other_p->state == RUNNABLE) || (other_p->state ==RUNNING)) {
+              if(min>other_p->accumulator)
+                min = other_p->accumulator;             
+        }
+        release(&other_p->lock);
+      }
+      
+    }
+    if(min==LLONG_MAX){
+      p->accumulator=0;
+    }
+    else{
+      p->accumulator=min;
+    }
+  
+  
 }
 
 // Create a user page table for a given process, with no user memory,
@@ -579,6 +605,30 @@ wakeup(void *chan)
     if(p != myproc()){
       acquire(&p->lock);
       if(p->state == SLEEPING && p->chan == chan) {
+
+
+            struct proc *other_p;
+            long long min=LLONG_MAX;
+            for(other_p = proc; other_p < &proc[NPROC]; other_p++) {
+                if(other_p != p){
+                  acquire(&other_p->lock);
+                    if((other_p->state == RUNNABLE) || (other_p->state ==RUNNING)) {
+                      if(min>other_p->accumulator)
+                        min = other_p->accumulator;             
+                    }
+                release(&other_p->lock);
+                }
+              
+            }
+            if(min==LLONG_MAX){
+              p->accumulator=0;
+            }
+            else{
+              p->accumulator=min;
+            }
+
+
+
         p->state = RUNNABLE;
       }
       release(&p->lock);

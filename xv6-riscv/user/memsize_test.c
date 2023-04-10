@@ -15,6 +15,8 @@ int main(int argc , char* argv[]){
     printf("%d\n", memsize());
     free(p);
     printf("%d\n", memsize());
+    
+
     return 0;
     
 }

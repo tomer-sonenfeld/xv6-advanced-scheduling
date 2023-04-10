@@ -50,6 +50,8 @@ int main(int argc , char* argv[]){
   66:	7ce50513          	addi	a0,a0,1998 # 830 <malloc+0xe4>
   6a:	00000097          	auipc	ra,0x0
   6e:	624080e7          	jalr	1572(ra) # 68e <printf>
+    
+
     return 0;
     
   72:	4501                	li	a0,0
