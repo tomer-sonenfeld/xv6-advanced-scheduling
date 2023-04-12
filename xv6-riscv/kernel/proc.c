@@ -7,6 +7,10 @@
 #include "defs.h"
 #include <limits.h>
 
+//task6
+#include "user/user.h"
+#include "stat.h"
+
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -171,7 +175,9 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
+  //task5
   p->ps_priority=5;
+  //task6
   p->cfs_priority=100;
   p->rtime=0;
   p->stime=0;
@@ -865,19 +871,54 @@ set_cfs_priority(int new_cfs)
   return -1;
 }
 
-int
-get_cfs_stats(int pid){
+
+struct proc_info {
+    int cfs_priority;
+    long long rtime;
+    long long stime;
+    long long retime;
+};
+
+
+struct proc_info
+get_cfs_stats(int pid)
+{
+  struct proc_info info;
+  struct proc *p = myproc();
+  info.cfs_priority = p->cfs_priority;
+  info.rtime = p->rtime;
+  info.stime = p->stime;
+  info.retime = p->retime;
+  return info;
+}
+
+
+void
+update_cfs_vars(void){
+  ///////////////////////////
+  //update run time
   struct proc *p;
-  for(p = proc; p < &proc[NPROC]; p++){
-    acquire(&p->lock);
-    if(p->pid == pid){
-      printf("cfs_priority: %d\n rtime: %d\n stime: %d\n retime: %d\n",p->cfs_priority,p->rtime,p->stime,p->retime);
-      release(&p->lock);
-      return 0;
+  if(p!=0){
+    for(p = proc; p < &proc[NPROC]; p++){
+      if(p->state == RUNNING){
+        p->rtime++;
+        p->vruntime= p->cfs_priority*(p->rtime/(p->rtime + p->stime+p->retime));
+      }
+
+      if(p->state == SLEEPING){
+        p->stime++;
+        p->vruntime= p->cfs_priority*(p->rtime/(p->rtime + p->stime+p->retime));
+      }
+
+      if(p->state == RUNNABLE){
+        p->retime++;
+        p->vruntime= p->cfs_priority*(p->rtime/(p->rtime + p->stime+p->retime));
+
+      }
+
     }
-    release(&p->lock);
   }
-  return -1;
+  ///////////////////////////
 }
 
 

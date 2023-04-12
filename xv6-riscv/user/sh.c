@@ -175,7 +175,7 @@ main(void)
       runcmd(parsecmd(buf));
     char msg[32];
     wait(0, msg);
-    printf("%s",msg);
+    printf("%s\n",msg);
     
         
   }

@@ -14,4 +14,5 @@ kernel/proc.o: kernel/proc.c kernel/types.h kernel/param.h \
  /usr/riscv64-linux-gnu/include/bits/posix1_lim.h \
  /usr/riscv64-linux-gnu/include/bits/local_lim.h \
  /usr/riscv64-linux-gnu/include/linux/limits.h \
- /usr/riscv64-linux-gnu/include/bits/posix2_lim.h
+ /usr/riscv64-linux-gnu/include/bits/posix2_lim.h user/user.h \
+ kernel/stat.h

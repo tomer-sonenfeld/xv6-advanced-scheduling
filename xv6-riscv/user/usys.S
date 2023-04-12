@@ -115,3 +115,13 @@ set_ps_priority:
  li a7, SYS_set_ps_priority
  ecall
  ret
+.global set_cfs_priority
+set_cfs_priority:
+ li a7, SYS_set_cfs_priority
+ ecall
+ ret
+.global get_cfs_stats
+get_cfs_stats:
+ li a7, SYS_get_cfs_stats
+ ecall
+ ret

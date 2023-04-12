@@ -9,6 +9,7 @@ struct sleeplock;
 struct stat;
 struct superblock;
 
+
 // bio.c
 void            binit(void);
 struct buf*     bread(uint, uint);
@@ -109,7 +110,9 @@ void            procdump(void);
 int             set_ps_priority(int);
 //task 6
 int             set_cfs_priority(int);
-int             get_cfs_stats(int);
+struct proc_info             get_cfs_stats(int);
+void            update_cfs_vars(void);
+
 
 // swtch.S
 void            swtch(struct context*, struct context*);

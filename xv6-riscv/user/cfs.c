@@ -3,9 +3,16 @@
 // sleeping for 1 second every 100000 iterations
 // each child then calls the get_cfs_stats system call
 
-#include "types.h"
-#include "stat.h"
+#include "kernel/types.h"
+#include "kernel/stat.h"
 #include "user.h"
+
+struct proc_info {
+    int cfs_priority;
+    long long rtime;
+    long long stime;
+    long long retime;
+};
 
 int main(){
     // //set process priority to low
@@ -58,7 +65,10 @@ int main(){
     // //wait for the third child
     // wait(0,msg);
     // exit(0,"cfs finished");
-
-    print("my priority is %d\n",get_cfs_priority());
+    
+    //get my pid
+    int pid = getpid();
+    struct proc_info *info= get_cfs_stats(pid);
+    printf("my cfs priority is %d\n", info->cfs_priority);
     exit(0,"cfs finished");
 }

@@ -118,11 +118,11 @@ sys_set_cfs_priority(void)
   return set_cfs_priority(new_priority);
 }
 
-uint64
+struct proc_info
 sys_get_cfs_stats(void)
 {
   int p;
-  argaddr(0, &p);
+  argint(0, &p);
   return get_cfs_stats(p);
 }
 
