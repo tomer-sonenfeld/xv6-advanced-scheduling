@@ -108,4 +108,11 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
   int ps_priority;             //task 5
+  //task 6
+  int cfs_priority;
+  long long rtime; // process total running time 
+  long long stime; // process total sleeping time
+  long long retime; // process total ready time
+  long long vruntime; // process virtual runtime
+  long long init_ticks;
 };

@@ -4,6 +4,7 @@
 #include "riscv.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "proc.c"
 #include "defs.h"
 
 struct spinlock tickslock;
@@ -165,6 +166,31 @@ clockintr()
 {
   acquire(&tickslock);
   ticks++;
+
+  ///////////////////////////
+  //update run time
+  struct proc *p= myproc();
+  if(p!=0 && p->state ==RUNNING){
+    p->rtime++;
+    p->cfs_priority*(p->rtime/(p->rtime + p->stime+p->retime));
+  }
+  //update sleep time
+  for(p = proc; p < &proc[NPROC]; p++){
+    if(p->state == SLEEPING){
+      p->stime++;
+      p->cfs_priority*(p->rtime/(p->rtime + p->stime+p->retime));
+    }
+  }
+  //update ready time
+  for(p = proc; p < &proc[NPROC]; p++){
+    if(p->state == RUNNABLE){
+      p->retime++;
+      p->cfs_priority*(p->rtime/(p->rtime + p->stime+p->retime));
+    }
+  }
+  
+  ///////////////////////////
+
   wakeup(&ticks);
   release(&tickslock);
 }

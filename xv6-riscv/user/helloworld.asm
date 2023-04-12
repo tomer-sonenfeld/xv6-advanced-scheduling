@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
    2:	e406                	sd	ra,8(sp)
    4:	e022                	sd	s0,0(sp)
    6:	0800                	addi	s0,sp,16
-    printf("Hello World, XV6");
+    printf("Hello World, XV6\n");
    8:	00000517          	auipc	a0,0x0
    c:	7d850513          	addi	a0,a0,2008 # 7e0 <malloc+0xe8>
   10:	00000097          	auipc	ra,0x0
@@ -43,7 +43,7 @@ _main()
   2e:	fd6080e7          	jalr	-42(ra) # 0 <main>
   exit(0,"");
   32:	00000597          	auipc	a1,0x0
-  36:	7be58593          	addi	a1,a1,1982 # 7f0 <malloc+0xf8>
+  36:	7c658593          	addi	a1,a1,1990 # 7f8 <malloc+0x100>
   3a:	4501                	li	a0,0
   3c:	00000097          	auipc	ra,0x0
   40:	276080e7          	jalr	630(ra) # 2b2 <exit>
@@ -760,7 +760,7 @@ printint(int fd, int xx, int base, int sgn)
     buf[i++] = digits[x % base];
  3a4:	2601                	sext.w	a2,a2
  3a6:	00000517          	auipc	a0,0x0
- 3aa:	45a50513          	addi	a0,a0,1114 # 800 <digits>
+ 3aa:	46250513          	addi	a0,a0,1122 # 808 <digits>
  3ae:	883a                	mv	a6,a4
  3b0:	2705                	addiw	a4,a4,1
  3b2:	02c5f7bb          	remuw	a5,a1,a2
@@ -870,7 +870,7 @@ vprintf(int fd, const char *fmt, va_list ap)
  46e:	07000d93          	li	s11,112
     putc(fd, digits[x >> (sizeof(uint64) * 8 - 4)]);
  472:	00000b97          	auipc	s7,0x0
- 476:	38eb8b93          	addi	s7,s7,910 # 800 <digits>
+ 476:	396b8b93          	addi	s7,s7,918 # 808 <digits>
  47a:	a839                	j	498 <vprintf+0x6a>
         putc(fd, c);
  47c:	85ca                	mv	a1,s2
@@ -1024,7 +1024,7 @@ vprintf(int fd, const char *fmt, va_list ap)
  5b0:	bdf9                	j	48e <vprintf+0x60>
           s = "(null)";
  5b2:	00000917          	auipc	s2,0x0
- 5b6:	24690913          	addi	s2,s2,582 # 7f8 <malloc+0x100>
+ 5b6:	24e90913          	addi	s2,s2,590 # 800 <malloc+0x108>
         while(*s != 0){
  5ba:	02800593          	li	a1,40
  5be:	bff1                	j	59a <vprintf+0x16c>

@@ -172,6 +172,13 @@ freeproc(struct proc *p)
   p->xstate = 0;
   p->state = UNUSED;
   p->ps_priority=5;
+  p->cfs_priority=100;
+  p->rtime=0;
+  p->stime=0;
+  p->retime=0;
+  p->vruntime = 0;
+  p->init_ticks=ticks;
+
 
  //..................................
     struct proc *other_p;
@@ -338,7 +345,12 @@ fork(void)
 
   safestrcpy(np->name, p->name, sizeof(p->name));
 
+
   pid = np->pid;
+  
+  //task6
+  np->cfs_priority=p->cfs_priority;
+  //
 
   release(&np->lock);
 
@@ -483,6 +495,54 @@ wait(uint64 addr , uint64 addr_exitmsg)
 void
 scheduler(void)
 {
+  // struct proc *p;
+  // struct cpu *c = mycpu();
+
+  // c->proc = 0;
+  // for(;;){
+  //   // Avoid deadlock by ensuring that devices can interrupt.
+  //   intr_on();
+
+  //   struct proc * min_acc_proc = 0;
+  //   for(p = proc; p < &proc[NPROC]; p++){
+  //     acquire(&p->lock);
+  //     if(p->state == RUNNABLE){
+
+  //       // Update min_acc_proc when finding first RUNNABLE
+  //       if(min_acc_proc == 0) {min_acc_proc = p;}
+
+  //       if(min_acc_proc->accumulator > p->accumulator){
+
+  //         // p is better then current min_acc_proc
+  //         // Release current min_acc_proc lock , keep holding the p lock
+
+  //         release(&min_acc_proc->lock);
+  //         min_acc_proc = p;
+          
+  //       }
+  //     }
+
+  //     else {release(&p->lock);}
+      
+  //   }
+
+    
+  //   if(min_acc_proc != 0){
+
+  //     // CPU FOUND A RUNNABLE PROCESS! 
+  //     min_acc_proc->state = RUNNING;
+  //     c->proc = min_acc_proc;
+  //     swtch(&c->context, &min_acc_proc->context);
+
+  //     // Process returned from context switch
+
+  //     c->proc = 0;
+  //     release(&min_acc_proc->lock);
+  //   }
+  // }
+
+  // task 6 //////////////////////////////////////////////////
+
   struct proc *p;
   struct cpu *c = mycpu();
 
@@ -491,21 +551,21 @@ scheduler(void)
     // Avoid deadlock by ensuring that devices can interrupt.
     intr_on();
 
-    struct proc * min_acc_proc = 0;
+    struct proc * min_vruntime_proc = 0;
     for(p = proc; p < &proc[NPROC]; p++){
       acquire(&p->lock);
       if(p->state == RUNNABLE){
 
         // Update min_acc_proc when finding first RUNNABLE
-        if(min_acc_proc == 0) {min_acc_proc = p;}
+        if(min_vruntime_proc == 0) {min_vruntime_proc = p;}
 
-        if(min_acc_proc->accumulator > p->accumulator){
+        if(min_vruntime_proc->vruntime > p->vruntime){
 
           // p is better then current min_acc_proc
           // Release current min_acc_proc lock , keep holding the p lock
 
-          release(&min_acc_proc->lock);
-          min_acc_proc = p;
+          release(&min_vruntime_proc->lock);
+          min_vruntime_proc = p;
           
         }
       }
@@ -515,19 +575,21 @@ scheduler(void)
     }
 
     
-    if(min_acc_proc != 0){
+    if(min_vruntime_proc != 0){
 
       // CPU FOUND A RUNNABLE PROCESS! 
-      min_acc_proc->state = RUNNING;
-      c->proc = min_acc_proc;
-      swtch(&c->context, &min_acc_proc->context);
+      min_vruntime_proc->state = RUNNING;
+      c->proc = min_vruntime_proc;
+      swtch(&c->context, &min_vruntime_proc->context);
 
       // Process returned from context switch
 
       c->proc = 0;
-      release(&min_acc_proc->lock);
+      release(&min_vruntime_proc->lock);
     }
   }
+
+  ///////////////////////////////////////////////////////////
 }
 //***********************************************
 
@@ -778,6 +840,44 @@ set_ps_priority(int new_ps)
   p->ps_priority = new_ps;
    
   return 0;
+}
+
+// task6
+int
+set_cfs_priority(int new_cfs)
+{
+  struct proc *p = myproc(); 
+  if(new_cfs==0){
+    p->cfs_priority=75;
+    return 0;
+  }
+
+  if(new_cfs==1){
+    p->cfs_priority=100;
+    return 0;
+  }
+
+  if(new_cfs==2){
+    p->cfs_priority=125;
+    return 0;
+  }
+   
+  return -1;
+}
+
+int
+get_cfs_stats(int pid){
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC]; p++){
+    acquire(&p->lock);
+    if(p->pid == pid){
+      printf("cfs_priority: %d\n rtime: %d\n stime: %d\n retime: %d\n",p->cfs_priority,p->rtime,p->stime,p->retime);
+      release(&p->lock);
+      return 0;
+    }
+    release(&p->lock);
+  }
+  return -1;
 }
 
 

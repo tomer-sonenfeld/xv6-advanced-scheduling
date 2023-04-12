@@ -109,6 +109,23 @@ sys_set_ps_priority(void)
   return set_ps_priority(new_priority);
 }
 
+//task6
+uint64
+sys_set_cfs_priority(void)
+{
+  int new_priority;
+  argint(0, &new_priority);
+  return set_cfs_priority(new_priority);
+}
+
+uint64
+sys_get_cfs_stats(void)
+{
+  int p;
+  argaddr(0, &p);
+  return get_cfs_stats(p);
+}
+
 
 
   
