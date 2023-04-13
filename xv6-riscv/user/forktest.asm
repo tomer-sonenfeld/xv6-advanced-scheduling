@@ -47,7 +47,7 @@ forktest(void)
 
   print("fork test\n");
   3a:	00000517          	auipc	a0,0x0
-  3e:	46650513          	addi	a0,a0,1126 # 4a0 <get_cfs_stats+0xe>
+  3e:	46e50513          	addi	a0,a0,1134 # 4a8 <set_policy+0xe>
   42:	00000097          	auipc	ra,0x0
   46:	fbe080e7          	jalr	-66(ra) # 0 <print>
 
@@ -71,18 +71,18 @@ forktest(void)
   if(n == N){
     print("fork claimed to work N times!\n");
   64:	00000517          	auipc	a0,0x0
-  68:	45450513          	addi	a0,a0,1108 # 4b8 <get_cfs_stats+0x26>
+  68:	45c50513          	addi	a0,a0,1116 # 4c0 <set_policy+0x26>
   6c:	00000097          	auipc	ra,0x0
   70:	f94080e7          	jalr	-108(ra) # 0 <print>
     exit(1,"");
   74:	00000597          	auipc	a1,0x0
-  78:	43c58593          	addi	a1,a1,1084 # 4b0 <get_cfs_stats+0x1e>
+  78:	44458593          	addi	a1,a1,1092 # 4b8 <set_policy+0x1e>
   7c:	4505                	li	a0,1
   7e:	00000097          	auipc	ra,0x0
   82:	35c080e7          	jalr	860(ra) # 3da <exit>
       exit(0,"");
   86:	00000597          	auipc	a1,0x0
-  8a:	42a58593          	addi	a1,a1,1066 # 4b0 <get_cfs_stats+0x1e>
+  8a:	43258593          	addi	a1,a1,1074 # 4b8 <set_policy+0x1e>
   8e:	00000097          	auipc	ra,0x0
   92:	34c080e7          	jalr	844(ra) # 3da <exit>
   if(n == N){
@@ -119,7 +119,7 @@ forktest(void)
 
   print("fork test OK\n");
   c8:	00000517          	auipc	a0,0x0
-  cc:	44050513          	addi	a0,a0,1088 # 508 <get_cfs_stats+0x76>
+  cc:	44850513          	addi	a0,a0,1096 # 510 <set_policy+0x76>
   d0:	00000097          	auipc	ra,0x0
   d4:	f30080e7          	jalr	-208(ra) # 0 <print>
 }
@@ -131,23 +131,23 @@ forktest(void)
   e2:	8082                	ret
       print("wait stopped early\n");
   e4:	00000517          	auipc	a0,0x0
-  e8:	3f450513          	addi	a0,a0,1012 # 4d8 <get_cfs_stats+0x46>
+  e8:	3fc50513          	addi	a0,a0,1020 # 4e0 <set_policy+0x46>
   ec:	00000097          	auipc	ra,0x0
   f0:	f14080e7          	jalr	-236(ra) # 0 <print>
       exit(1,"");
   f4:	00000597          	auipc	a1,0x0
-  f8:	3bc58593          	addi	a1,a1,956 # 4b0 <get_cfs_stats+0x1e>
+  f8:	3c458593          	addi	a1,a1,964 # 4b8 <set_policy+0x1e>
   fc:	4505                	li	a0,1
   fe:	00000097          	auipc	ra,0x0
  102:	2dc080e7          	jalr	732(ra) # 3da <exit>
     print("wait got too many\n");
  106:	00000517          	auipc	a0,0x0
- 10a:	3ea50513          	addi	a0,a0,1002 # 4f0 <get_cfs_stats+0x5e>
+ 10a:	3f250513          	addi	a0,a0,1010 # 4f8 <set_policy+0x5e>
  10e:	00000097          	auipc	ra,0x0
  112:	ef2080e7          	jalr	-270(ra) # 0 <print>
     exit(1,"");
  116:	00000597          	auipc	a1,0x0
- 11a:	39a58593          	addi	a1,a1,922 # 4b0 <get_cfs_stats+0x1e>
+ 11a:	3a258593          	addi	a1,a1,930 # 4b8 <set_policy+0x1e>
  11e:	4505                	li	a0,1
  120:	00000097          	auipc	ra,0x0
  124:	2ba080e7          	jalr	698(ra) # 3da <exit>
@@ -166,7 +166,7 @@ main(void)
  134:	efe080e7          	jalr	-258(ra) # 2e <forktest>
   exit(0,"");
  138:	00000597          	auipc	a1,0x0
- 13c:	37858593          	addi	a1,a1,888 # 4b0 <get_cfs_stats+0x1e>
+ 13c:	38058593          	addi	a1,a1,896 # 4b8 <set_policy+0x1e>
  140:	4501                	li	a0,0
  142:	00000097          	auipc	ra,0x0
  146:	298080e7          	jalr	664(ra) # 3da <exit>
@@ -188,7 +188,7 @@ _main()
  156:	fd6080e7          	jalr	-42(ra) # 128 <main>
   exit(0,"");
  15a:	00000597          	auipc	a1,0x0
- 15e:	35658593          	addi	a1,a1,854 # 4b0 <get_cfs_stats+0x1e>
+ 15e:	35e58593          	addi	a1,a1,862 # 4b8 <set_policy+0x1e>
  162:	4501                	li	a0,0
  164:	00000097          	auipc	ra,0x0
  168:	276080e7          	jalr	630(ra) # 3da <exit>
@@ -864,3 +864,13 @@ get_cfs_stats:
  494:	00000073          	ecall
  ret
  498:	8082                	ret
+
+000000000000049a <set_policy>:
+.global set_policy
+set_policy:
+ li a7, SYS_set_policy
+ 49a:	48e9                	li	a7,26
+ ecall
+ 49c:	00000073          	ecall
+ ret
+ 4a0:	8082                	ret

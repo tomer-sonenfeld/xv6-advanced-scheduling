@@ -25,4 +25,6 @@
 //task 6
 #define SYS_set_cfs_priority 24
 #define SYS_get_cfs_stats 25
+//task 7
+#define SYS_set_policy 26
 

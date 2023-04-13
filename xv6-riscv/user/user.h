@@ -26,7 +26,8 @@ int memsize(void);
 int set_ps_priority(int);
 //task 6
 int set_cfs_priority(int);
-char* get_cfs_stats(int);
+char* get_cfs_stats(int , long long*, long long* , long long*, long long*);
+int set_policy(int);
 
 
 // ulib.c

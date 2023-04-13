@@ -1006,6 +1006,7 @@ forkforkfork(char *s)
   }
   if(pid == 0){
     while(1){
+      
       int fd = open("stopforking", 0);
       if(fd >= 0){
         exit(0,"");
@@ -2123,7 +2124,6 @@ kernmem(char *s)
 {
   char *a;
   int pid;
-
   for(a = (char*)(KERNBASE); a < (char*) (KERNBASE+2000000); a += 50000){
     pid = fork();
     if(pid < 0){
@@ -2134,6 +2134,7 @@ kernmem(char *s)
       printf("%s: oops could read %x = %x\n", s, a, *a);
       exit(1,"");
     }
+    printf("%s\n","r u here?");
     int xstatus;
     wait(&xstatus,0);
     if(xstatus != -1)  // did kernel kill child?

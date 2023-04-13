@@ -136,6 +136,8 @@ UPROGS=\
 	$U/_memsize_test\
 	$U/_goodbye\
 	$U/_cfs\
+	$U/_cfs1\
+	$U/_policy\
 	
 	
 

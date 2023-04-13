@@ -163,6 +163,7 @@ kerneltrap()
 void
 clockintr()
 {
+  
   acquire(&tickslock);
   ticks++;
 

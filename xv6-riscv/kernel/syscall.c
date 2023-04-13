@@ -7,6 +7,9 @@
 #include "syscall.h"
 #include "defs.h"
 
+
+
+
 // Fetch the uint64 at addr from the current process.
 int
 fetchaddr(uint64 addr, uint64 *ip)
@@ -106,6 +109,8 @@ extern uint64 sys_set_ps_priority(void);
 //task6
 extern uint64 sys_set_cfs_priority(void);
 extern uint64 sys_get_cfs_stats(void);
+//task7
+extern uint64 sys_set_policy(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -136,6 +141,7 @@ static uint64 (*syscalls[])(void) = {
 //task 6
 [SYS_set_cfs_priority] sys_set_cfs_priority,
 [SYS_get_cfs_stats] sys_get_cfs_stats,
+[SYS_set_policy] sys_set_policy,
 
 };
 

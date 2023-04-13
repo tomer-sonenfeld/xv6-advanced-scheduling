@@ -118,13 +118,35 @@ sys_set_cfs_priority(void)
   return set_cfs_priority(new_priority);
 }
 
-struct proc_info
+uint64
 sys_get_cfs_stats(void)
 {
   int p;
   argint(0, &p);
-  return get_cfs_stats(p);
+
+  int add1;
+  argint(1, &add1);
+
+  int add2;
+  argint(2, &add2);
+
+  int add3;
+  argint(3, &add3);
+
+ int add4;
+  argint(4, &add4);
+
+  return get_cfs_stats(p ,add1,add2,add3,add4);
 }
+
+uint64
+sys_set_policy(void)
+{
+  int new_policy;
+  argint(0, &new_policy);  
+  return set_policy(new_policy);
+}
+
 
 
 
